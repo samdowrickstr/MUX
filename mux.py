@@ -1,10 +1,10 @@
 import os
 from kivy.config import Config
-Config.set('graphics', 'rotation', '0')
-Config.set('graphics', 'borderless', '0')
+Config.set('graphics', 'rotation', '90')
+Config.set('graphics', 'borderless', '1')
 Config.set('graphics', 'width', '1480')
 Config.set('graphics', 'height', '320')
-Config.set('graphics', 'resizable', '1')
+Config.set('graphics', 'resizable', '0')
 Config.write()
 
 from kivy.lang import Builder
