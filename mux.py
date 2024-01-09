@@ -63,4 +63,3 @@ class Example(MDApp):
         return Builder.load_string(KV)
 
 Example().run()
-
