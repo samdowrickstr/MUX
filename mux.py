@@ -1,46 +1,66 @@
 import os
 from kivy.config import Config
-Config.set('graphics', 'rotation', '90')
-Config.set('graphics', 'borderless', '1')
+Config.set('graphics', 'rotation', '0')
+Config.set('graphics', 'borderless', '0')
 Config.set('graphics', 'width', '1480')
 Config.set('graphics', 'height', '320')
-Config.set('graphics', 'resizable', '0')
+Config.set('graphics', 'resizable', '1')
 Config.write()
 
 from kivy.lang import Builder
 from kivymd.app import MDApp
-from kivymd.uix.button import MDFloatingActionButton
+from kivymd.uix.bottomnavigation import MDBottomNavigation, MDBottomNavigationItem
+from kivymd.uix.label import MDLabel
+from kivymd.icon_definitions import md_icons
 
 KV = '''
-ScreenManager:
-    MDScreen:
-        name: 'page1'
-        MDFloatingActionButton:
-            icon: 'arrow-right'
-            pos_hint: {'center_x': 0.9, 'center_y': 0.1}
-            on_release: app.root.current = 'page2'
-        MDFloatingActionButton:
-            icon: 'close'
-            pos_hint: {'center_x': 0.1, 'center_y': 0.9}
-            on_release: app.terminate()
+BoxLayout:
+    orientation: 'vertical'
+    MDBottomNavigation:
+        id: bottom_navigation
 
-    MDScreen:
-        name: 'page2'
-        MDFloatingActionButton:
-            icon: 'arrow-left'
-            pos_hint: {'center_x': 0.1, 'center_y': 0.1}
-            on_release: app.root.current = 'page1'
-        MDFloatingActionButton:
-            icon: 'close'
-            pos_hint: {'center_x': 0.9, 'center_y': 0.9}
-            on_release: app.terminate()
+        MDBottomNavigationItem:
+            name: 'screen 1'
+            text: 'Power'
+            icon: 'flash'
+
+            MDLabel:
+                text: 'Power tab content here'
+                halign: 'center'
+
+        MDBottomNavigationItem:
+            name: 'screen 2'
+            text: 'Ethernet'
+            icon: 'lan'
+
+            MDLabel:
+                text: 'Ethernet tab content here'
+                halign: 'center'
+
+        MDBottomNavigationItem:
+            name: 'screen 3'
+            text: 'Serial'
+            icon: 'serial-port'
+
+            MDLabel:
+                text: 'Serial tab content here'
+                halign: 'center'
+
+        MDBottomNavigationItem:
+            name: 'screen 4'
+            text: 'Settings'
+            icon: 'cog'
+
+            MDLabel:
+                text: 'Settings tab content here'
+                halign: 'center'
 '''
 
-class MyApp(MDApp):
+class Example(MDApp):
     def build(self):
+        self.theme_cls.theme_style = "Dark"
+        self.theme_cls.primary_palette = "Blue"
         return Builder.load_string(KV)
 
-    def terminate(self):
-        os._exit(0)
+Example().run()
 
-MyApp().run()
