@@ -8,7 +8,7 @@ from kivymd.uix.card import MDCard
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.chip import MDChip
 
-Config.set('graphics', 'rotation', '0')
+Config.set('graphics', 'rotation', '1')
 Config.set('graphics', 'borderless', '1')
 Config.set('graphics', 'width', '1480')
 Config.set('graphics', 'height', '320')
