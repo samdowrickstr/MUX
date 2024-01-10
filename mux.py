@@ -1,5 +1,6 @@
 import os
 import socket
+import subprocess
 
 from kivy.config import Config
 Config.set('graphics', 'rotation', '0')
@@ -169,11 +170,14 @@ class Example(MDApp):
     def adjust_brightness(self, value):
         # Adjust the screen brightness
         brightness_value = int(value)
+        command = f'echo {brightness_value} > /sys/waveshare/rpi_backlight/brightness'
+
         try:
-            with open('/sys/waveshare/rpi_backlight/brightness', 'w') as file:
-                file.write(f'{brightness_value}')
-        except Exception as e:
+            subprocess.run(['sudo', 'bash', '-c', command], check=True)
+        except subprocess.CalledProcessError as e:
             print(f"Error adjusting brightness: {e}")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
 Example().run()
 
