@@ -1,20 +1,21 @@
 import os
-from kivy.lang import Builder
+import socket
+
 from kivy.config import Config
+Config.set('graphics', 'rotation', '0')
+Config.set('graphics', 'borderless', '1')
+Config.set('graphics', 'width', '1480')
+Config.set('graphics', 'height', '320')
+Config.set('graphics', 'resizable', '0')
+Config.write()
+
+from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.card import MDCard
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.chip import MDChip
 from kivymd.uix.slider import MDSlider
-import socket
-
-Config.set('graphics', 'rotation', '90')
-Config.set('graphics', 'borderless', '1')
-Config.set('graphics', 'width', '1480')
-Config.set('graphics', 'height', '320')
-Config.set('graphics', 'resizable', '0')
-Config.write()
 
 def get_ip_address():
     try:
@@ -81,7 +82,7 @@ BoxLayout:
         MDBottomNavigationItem:
             name: 'screen 3'
             text: 'Serial'
-            icon: 'serial'
+            icon: 'serial-port'
 
             BoxLayout:
                 orientation: 'vertical'
@@ -105,33 +106,33 @@ BoxLayout:
             icon: 'cog'
 
             BoxLayout:
-            orientation: 'vertical'
-            padding: "10dp"
+                orientation: 'vertical'
+                padding: "10dp"
 
-            MDLabel:
-                text: 'Settings tab content here'
-                halign: 'center'
+                MDLabel:
+                    text: 'Settings tab content here'
+                    halign: 'center'
 
-            MDCard:
-                size_hint: None, None
-                size: "280dp", "120dp"
-                pos_hint: {"center_x": 0.5}
-                elevation: 10
+                MDCard:
+                    size_hint: None, None
+                    size: "280dp", "120dp"
+                    pos_hint: {"center_x": 0.5}
+                    elevation: 10
 
-                BoxLayout:
-                    orientation: 'vertical'
-                    padding: "10dp"
+                    BoxLayout:
+                        orientation: 'vertical'
+                        padding: "10dp"
 
-                    MDLabel:
-                        text: 'Adjust Brightness'
-                        halign: 'center'
+                        MDLabel:
+                            text: 'Adjust Brightness'
+                            halign: 'center'
 
-                    MDSlider:
-                        id: brightness_slider
-                        min: 0
-                        max: 255
-                        value: 100  # Default value
-                        on_value: app.adjust_brightness(self.value)
+                        MDSlider:
+                            id: brightness_slider
+                            min: 0
+                            max: 255
+                            value: 100  # Default value
+                            on_value: app.adjust_brightness(self.value)
 
 '''
 
@@ -165,13 +166,14 @@ class Example(MDApp):
             )
         self.dialog.open()
 
-        def adjust_brightness(self, value):
+    def adjust_brightness(self, value):
         # Adjust the screen brightness
-            brightness_value = int(value)
-            try:
-                with open('/sys/waveshare/rpi_backlight/brightness', 'w') as file:
-                    file.write(f'{brightness_value}')
-            except Exception as e:
-                print(f"Error adjusting brightness: {e}")
+        brightness_value = int(value)
+        try:
+            with open('/sys/waveshare/rpi_backlight/brightness', 'w') as file:
+                file.write(f'{brightness_value}')
+        except Exception as e:
+            print(f"Error adjusting brightness: {e}")
 
 Example().run()
+
