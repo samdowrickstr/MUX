@@ -144,7 +144,24 @@ class Example(MDApp):
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Blue"
         self.ethernet_content = "Ethernet IP Address: " + get_ip_address()
-        return Builder.load_string(KV)
+
+        root_widget = Builder.load_string(KV)
+
+        # Get current brightness value
+        try:
+            with open('/sys/waveshare/rpi_backlight/brightness', 'r') as file:
+                current_brightness = int(file.read().strip())
+            # Invert the value for the slider
+            slider_value = 245 - current_brightness
+        except Exception as e:
+            print(f"Error reading brightness: {e}")
+            slider_value = 245  # Default value in case of error
+
+        # Set the default slider value
+        root_widget.ids.brightness_slider.value = slider_value
+
+        return root_widget
+
 
     def show_dialog(self):
         if not self.dialog:
@@ -168,7 +185,7 @@ class Example(MDApp):
         self.dialog.open()
 
     def adjust_brightness(self, value):
-        # Invert the brightness value
+        # Invert the brightness value with 245 as the minimum
         inverted_brightness_value = 245 - int(value)
 
         command = f'echo {inverted_brightness_value} > /sys/waveshare/rpi_backlight/brightness'
@@ -179,6 +196,7 @@ class Example(MDApp):
             print(f"Error adjusting brightness: {e}")
         except Exception as e:
             print(f"An error occurred: {e}")
+
 
 Example().run()
 
