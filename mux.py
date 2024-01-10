@@ -10,6 +10,15 @@ from kivy.core.window import Window
 from kivymd.app import MDApp
 
 from View.ManagerScreen.manager_screen import ManagerScreen
+from kivy.config import Config
+
+Config.set('graphics', 'rotation', '90')
+Config.set('graphics', 'borderless', '1')
+Config.set('graphics', 'width', '1480')
+Config.set('graphics', 'height', '320')
+Config.set('graphics', 'resizable', '0')
+Config.write()
+
 
 if getattr(sys, "frozen", False):
     os.environ["KITCHEN_SINK_ROOT"] = sys._MEIPASS
