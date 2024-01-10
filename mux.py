@@ -10,17 +10,16 @@ Config.write()
 
 from kivy.lang import Builder
 from kivymd.app import MDApp
+from kivy.uix.screenmanager import ScreenManager, Screen
 from kivymd.uix.bottomnavigation import MDBottomNavigation, MDBottomNavigationItem
 from kivymd.uix.label import MDLabel
 from kivymd.icon_definitions import md_icons
 
 def get_ip_address():
     try:
-        # Create a socket to connect to an Internet host
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.settimeout(0)
         try:
-            # Connect the socket to a remote server
             s.connect(('10.255.255.255', 1))
             IP = s.getsockname()[0]
         except Exception:
@@ -34,6 +33,34 @@ def get_ip_address():
 KV = '''
 BoxLayout:
     orientation: 'vertical'
+
+    ScreenManager:
+        id: screen_manager
+
+        Screen:
+            name: 'screen 1'
+            MDLabel:
+                text: 'Power tab content here'
+                halign: 'center'
+
+        Screen:
+            name: 'screen 2'
+            MDLabel:
+                text: app.ethernet_content
+                halign: 'center'
+
+        Screen:
+            name: 'screen 3'
+            MDLabel:
+                text: 'Serial tab content here'
+                halign: 'center'
+
+        Screen:
+            name: 'screen 4'
+            MDLabel:
+                text: 'Settings tab content here'
+                halign: 'center'
+
     MDBottomNavigation:
         id: bottom_navigation
 
@@ -41,37 +68,25 @@ BoxLayout:
             name: 'screen 1'
             text: 'Power'
             icon: 'flash'
-
-            MDLabel:
-                text: 'Power tab content here'
-                halign: 'center'
+            on_tab_release: screen_manager.current = self.name
 
         MDBottomNavigationItem:
             name: 'screen 2'
             text: 'Ethernet'
             icon: 'lan'
-
-            MDLabel:
-                text: app.ethernet_content
-                halign: 'center'
+            on_tab_release: screen_manager.current = self.name
 
         MDBottomNavigationItem:
             name: 'screen 3'
             text: 'Serial'
             icon: 'serial-port'
-
-            MDLabel:
-                text: 'Serial tab content here'
-                halign: 'center'
+            on_tab_release: screen_manager.current = self.name
 
         MDBottomNavigationItem:
             name: 'screen 4'
             text: 'Settings'
             icon: 'cog'
-
-            MDLabel:
-                text: 'Settings tab content here'
-                halign: 'center'
+            on_tab_release: screen_manager.current = self.name
 '''
 
 class Example(MDApp):
@@ -80,5 +95,8 @@ class Example(MDApp):
         self.theme_cls.primary_palette = "Blue"
         self.ethernet_content = "Ethernet IP Address: " + get_ip_address()
         return Builder.load_string(KV)
+
+    def switch_screen(self, screen_name):
+        self.root.ids.screen_manager.current = screen_name
 
 Example().run()
