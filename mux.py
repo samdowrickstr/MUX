@@ -168,10 +168,11 @@ class Example(MDApp):
         self.dialog.open()
 
     def adjust_brightness(self, value):
-        # Adjust the screen brightness
-        brightness_value = int(value)
-        command = f'echo {brightness_value} > /sys/waveshare/rpi_backlight/brightness'
+        # Invert the brightness value
+        inverted_brightness_value = 255 - int(value)
 
+        command = f'echo {inverted_brightness_value} > /sys/waveshare/rpi_backlight/brightness'
+        
         try:
             subprocess.run(['sudo', 'bash', '-c', command], check=True)
         except subprocess.CalledProcessError as e:
