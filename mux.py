@@ -1,7 +1,6 @@
 import os
 import socket
 import subprocess
-
 from kivy.config import Config
 Config.set('graphics', 'rotation', '90')
 Config.set('graphics', 'borderless', '1')
@@ -140,24 +139,26 @@ BoxLayout:
 class Example(MDApp):
     dialog = None
 
+    def __init__(self, **kwargs):
+        super(Example, self).__init__(**kwargs)
+        self.current_brightness = self.read_brightness_value()
+        
+    def read_brightness_value(self):
+        try:
+            with open('brightness_setting.txt', 'r') as file:
+                return int(file.read().strip())
+        except Exception as e:
+            print(f"Error reading brightness value: {e}")
+            # Return default value if there's an error
+            return 0
+    
     def build(self):
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Blue"
         self.ethernet_content = "Ethernet IP Address: " + get_ip_address()
 
         root_widget = Builder.load_string(KV)
-
-        # Get current brightness value
-        try:
-            with open('/sys/waveshare/rpi_backlight/brightness', 'r') as file:
-                current_brightness = int(file.read().strip())
-            # Invert the value for the slider
-            slider_value = 245 - current_brightness
-        except Exception as e:
-            print(f"Error reading brightness: {e}")
-            slider_value = 245  # Default value in case of error
-
-        # Set the default slider value
+        slider_value = 245 - self.current_brightness
         root_widget.ids.brightness_slider.value = slider_value
 
         return root_widget
@@ -187,15 +188,20 @@ class Example(MDApp):
     def adjust_brightness(self, value):
         # Invert the brightness value with 245 as the minimum
         inverted_brightness_value = 245 - int(value)
+        self.current_brightness = inverted_brightness_value
 
-        command = f'echo {inverted_brightness_value} > /sys/waveshare/rpi_backlight/brightness'
-        
+        # Save brightness value to a file
+        self.save_brightness_value(self.current_brightness)
+
+        command = f'echo {self.current_brightness} > /sys/waveshare/rpi_backlight/brightness'
+        # ... (rest of the code for executing the command)
+
+    def save_brightness_value(self, value):
         try:
-            subprocess.run(['sudo', 'bash', '-c', command], check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"Error adjusting brightness: {e}")
+            with open('brightness_setting.txt', 'w') as file:
+                file.write(str(value))
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"Error saving brightness value: {e}")
 
 
 Example().run()
