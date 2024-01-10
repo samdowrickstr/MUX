@@ -131,7 +131,7 @@ BoxLayout:
                         MDSlider:
                             id: brightness_slider
                             min: 0
-                            max: 255
+                            max: 245
                             value: 100  # Default value
                             on_value: app.adjust_brightness(self.value)
 
@@ -169,7 +169,7 @@ class Example(MDApp):
 
     def adjust_brightness(self, value):
         # Invert the brightness value
-        inverted_brightness_value = 255 - int(value)
+        inverted_brightness_value = 245 - int(value)
 
         command = f'echo {inverted_brightness_value} > /sys/waveshare/rpi_backlight/brightness'
         
