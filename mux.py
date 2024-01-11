@@ -286,7 +286,7 @@ class Example(MDApp):
 
     def on_power_button_press(self, *args):
         try:
-            subprocess.run(['sudo', 'reboot'], check=True)
+            subprocess.run(['sudo', 'shutdown', 'now'], check=True)
         except subprocess.CalledProcessError as e:
             print(f"Failed to reboot: {e}")
         except Exception as e:
