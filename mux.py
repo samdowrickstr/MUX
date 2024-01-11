@@ -2,7 +2,7 @@ import os
 import socket
 import subprocess
 from kivy.config import Config
-Config.set('graphics', 'rotation', '90')
+Config.set('graphics', 'rotation', '0')
 Config.set('graphics', 'borderless', '1')
 Config.set('graphics', 'width', '1480')
 Config.set('graphics', 'height', '320')
@@ -33,6 +33,19 @@ def get_ip_address():
         return 'No IP Found'
 
 KV = '''
+<MySwiper@MDSwiperItem>
+    MDCard:
+        size_hint: 0.7, 0.8
+        focus_behavior: True
+        pos_hint: {"center_x": .5, "center_y": .5}
+        elevation: 6
+        md_bg_color: "darkgrey"
+        unfocus_color: "darkgrey"
+        focus_color: "grey"
+        ripple_behavior: True
+        on_release: app.show_dialog()
+        text: "Open Dialog"
+
 BoxLayout:
     orientation: 'vertical'
     MDBottomNavigation:
@@ -46,18 +59,12 @@ BoxLayout:
                 orientation: 'vertical'
                 padding: "10dp"
 
-                MDLabel:
-                    text: 'Power tab content here'
-                    halign: 'center'
+            MDSwiper:
 
-                MDCard:
-                    size_hint: None, None
-                    size: "280dp", "40dp"
-                    pos_hint: {"center_x": 0.5}
-                    elevation: 10
-                    MDFlatButton:
-                        text: "Open Dialog"
-                        on_release: app.show_dialog()
+                MySwiper:
+
+                MySwiper:
+
         MDBottomNavigationItem:
             name: 'screen 2'
             text: 'Ethernet'
