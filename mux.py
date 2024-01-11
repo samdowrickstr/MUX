@@ -2,7 +2,7 @@ import os
 import socket
 import subprocess
 from kivy.config import Config
-Config.set('graphics', 'rotation', '90')
+Config.set('graphics', 'rotation', '0')
 Config.set('graphics', 'borderless', '1')
 Config.set('graphics', 'width', '1480')
 Config.set('graphics', 'height', '320')
@@ -16,6 +16,11 @@ from kivymd.uix.card import MDCard
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.chip import MDChip
 from kivymd.uix.slider import MDSlider
+from kivymd.uix.behaviors import RoundedRectangularElevationBehavior
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivy.metrics import dp
+from kivymd.uix.label import MDLabel
+from kivymd.font_definitions import theme_font_styles
 
 def get_ip_address():
     try:
@@ -32,20 +37,22 @@ def get_ip_address():
     except:
         return 'No IP Found'
 
+class SquareCard(MDCard):
+    def __init__(self, **kwargs):
+        super(SquareCard, self).__init__(**kwargs)
+        self.size_hint = (None, 0.5)
+        self.bind(size=self.update_size)  # Bind size to update_size method
+        self.elevation = dp(6)
+        self.soft_shadow_cl = [0, 0, 0, .05]
+        self.radius = dp(10)
+        self.md_bg_color = "darkgrey"
+        self.unfocus_color = "darkgrey"
+        self.focus_color = "grey"
+        self.ripple_behavior = True
+    def update_size(self, instance, value):
+        self.width = self.height  # Set width equal to height
+        
 KV = '''
-<MySwiper@MDSwiperItem>
-    MDCard:
-        size_hint: 0.7, 0.8
-        focus_behavior: True
-        pos_hint: {"center_x": .5, "center_y": .5}
-        elevation: 6
-        md_bg_color: "darkgrey"
-        unfocus_color: "darkgrey"
-        focus_color: "grey"
-        ripple_behavior: True
-        on_release: app.show_dialog()
-        text: "Open Dialog"
-
 BoxLayout:
     orientation: 'vertical'
     MDBottomNavigation:
@@ -57,13 +64,57 @@ BoxLayout:
 
             BoxLayout:
                 orientation: 'vertical'
-                padding: "10dp"
+                padding: "5dp"
 
-            MDSwiper:
+                ScrollView:
+                    do_scroll_y: False
+                    size_hint: 1, 1
+                    adaptive_width: True
+                    MDGridLayout:
+                        rows: 1
+                        row_force_default: False
+                        size_hint: 1, 1
+                        spacing: dp(15)
+                        padding: dp(15)
+                        adaptive_width: True
 
-                MySwiper:
-
-                MySwiper:
+                        SquareCard:
+                            on_release: app.show_dialog()
+                            MDLabel:
+                                text: "P1"
+                                halign: "center"
+                        SquareCard:
+                            on_release: app.show_dialog()
+                            MDLabel:
+                                text: "P1"
+                                halign: "center"
+                        SquareCard:
+                            on_release: app.show_dialog()
+                            MDLabel:
+                                text: "P1"
+                                halign: "center"
+                        SquareCard:
+                            on_release: app.show_dialog()
+                        SquareCard:
+                            on_release: app.show_dialog()
+                        SquareCard:
+                            on_release: app.show_dialog()
+                        SquareCard:
+                            on_release: app.show_dialog()
+                        SquareCard:
+                            on_release: app.show_dialog()
+                        SquareCard:
+                            on_release: app.show_dialog()
+                        SquareCard:
+                            on_release: app.show_dialog()
+                        SquareCard:
+                            on_release: app.show_dialog()
+                        SquareCard:
+                            on_release: app.show_dialog()
+                        SquareCard:
+                            on_release: app.show_dialog()
+                        SquareCard:
+                            on_release: app.show_dialog()
 
         MDBottomNavigationItem:
             name: 'screen 2'
@@ -142,7 +193,6 @@ BoxLayout:
                             on_value: app.adjust_brightness(self.value)
 
 '''
-
 class Example(MDApp):
     dialog = None
 
@@ -181,16 +231,21 @@ class Example(MDApp):
                         text="CANCEL",
                         theme_text_color="Custom",
                         text_color=self.theme_cls.primary_color,
+                        on_release=self.close_dialog  # Bind close_dialog method
                     ),
                     MDFlatButton(
                         text="DISCARD",
                         theme_text_color="Custom",
                         text_color=self.theme_cls.primary_color,
+                        on_release=self.close_dialog  # Bind close_dialog method
                     ),
                 ],
                 items=[MDChip(text=f"Chip {i}") for i in range(5)]
             )
         self.dialog.open()
+
+    def close_dialog(self, *args):
+        self.dialog.dismiss()  # This will close the dialog
 
     def adjust_brightness(self, value):
         # Invert the brightness value with 245 as the minimum
