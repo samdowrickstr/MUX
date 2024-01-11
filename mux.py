@@ -64,7 +64,7 @@ BoxLayout:
         id: time_label
         md_bg_color: app.theme_cls.primary_color
         elevation: 0
-        right_action_items: [['power', lambda x: app.on_power_button_press()]]
+        right_action_items: [['git', lambda x: app.on_git_button_press()], ['power', lambda x: app.on_power_button_press()]]
 
     MDBottomNavigation:
         id: bottom_navigation
@@ -288,6 +288,15 @@ class Example(MDApp):
             print(f"Failed to reboot: {e}")
         except Exception as e:
             print(f"An error occurred: {e}")
+
+    def on_git_button_press(self, *args):
+        try:
+            subprocess.run(['cd mux', 'git pull'], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to reboot: {e}")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+    
     def on_start(self):
         Clock.schedule_interval(self.update_time, 1)
 
