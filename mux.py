@@ -106,6 +106,9 @@ BoxLayout:
                                 halign: "center"
                         SquareCard:
                             on_release: app.show_dialog()
+                            MDLabel:
+                                text: "Power 4"
+                                halign: "center"
                         SquareCard:
                             on_release: app.show_dialog()
                         SquareCard:
