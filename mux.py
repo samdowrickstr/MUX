@@ -97,12 +97,12 @@ BoxLayout:
                         SquareCard:
                             on_release: app.show_dialog()
                             MDLabel:
-                                text: "P1"
+                                text: "P2"
                                 halign: "center"
                         SquareCard:
                             on_release: app.show_dialog()
                             MDLabel:
-                                text: "P1"
+                                text: "P3"
                                 halign: "center"
                         SquareCard:
                             on_release: app.show_dialog()
