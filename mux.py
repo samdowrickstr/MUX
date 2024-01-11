@@ -59,7 +59,7 @@ BoxLayout:
     MDTopAppBar:
         title: "Fiber Mux"
         md_bg_color: app.theme_cls.primary_color
-        elevation: 10
+        elevation: 0
         right_action_items: [['power', lambda x: app.on_power_button_press()]]
 
     MDBottomNavigation:
@@ -140,7 +140,7 @@ BoxLayout:
                     size_hint: None, None
                     size: "280dp", "40dp"
                     pos_hint: {"center_x": 0.5}
-                    elevation: 10
+                    elevation: 0
                     MDFlatButton:
                         text: "Open Dialog"
                         on_release: app.show_dialog()
@@ -161,7 +161,7 @@ BoxLayout:
                     size_hint: None, None
                     size: "280dp", "40dp"
                     pos_hint: {"center_x": 0.5}
-                    elevation: 10
+                    elevation: 0
                     MDFlatButton:
                         text: "Open Dialog"
                         on_release: app.show_dialog()
@@ -182,7 +182,7 @@ BoxLayout:
                     size_hint: None, None
                     size: "280dp", "120dp"
                     pos_hint: {"center_x": 0.5}
-                    elevation: 10
+                    elevation: 0
 
                     BoxLayout:
                         orientation: 'vertical'
