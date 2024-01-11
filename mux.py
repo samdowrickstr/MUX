@@ -291,7 +291,7 @@ class Example(MDApp):
 
     def on_git_button_press(self, *args):
         try:
-            subprocess.run(['cd mux', 'git pull'], check=True)
+            subprocess.run(['git', '-C', 'mux', 'pull'], check=True)
         except subprocess.CalledProcessError as e:
             print(f"Failed to reboot: {e}")
         except Exception as e:
