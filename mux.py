@@ -2,7 +2,7 @@ import os
 import socket
 import subprocess
 from kivy.config import Config
-Config.set('graphics', 'rotation', '90')
+Config.set('graphics', 'rotation', '0')
 Config.set('graphics', 'borderless', '1')
 Config.set('graphics', 'width', '1480')
 Config.set('graphics', 'height', '320')
@@ -22,6 +22,10 @@ from kivy.metrics import dp
 from kivymd.uix.label import MDLabel
 from kivymd.font_definitions import theme_font_styles
 from kivymd.uix.button import MDFloatingActionButton
+from kivy.clock import Clock
+from datetime import datetime
+
+
 def get_ip_address():
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -57,7 +61,7 @@ BoxLayout:
     orientation: 'vertical'
     
     MDTopAppBar:
-        title: "Fiber Mux"
+        id: time_label
         md_bg_color: app.theme_cls.primary_color
         elevation: 0
         right_action_items: [['power', lambda x: app.on_power_button_press()]]
@@ -284,5 +288,10 @@ class Example(MDApp):
             print(f"Failed to reboot: {e}")
         except Exception as e:
             print(f"An error occurred: {e}")
+    def on_start(self):
+        Clock.schedule_interval(self.update_time, 1)
+
+    def update_time(self, *args):
+        self.root.ids.time_label.title = datetime.now().strftime('%H:%M:%S')
 Example().run()
 
