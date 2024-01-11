@@ -42,7 +42,7 @@ class SquareCard(MDCard):
         super(SquareCard, self).__init__(**kwargs)
         self.size_hint = (None, 0.5)
         self.bind(size=self.update_size)  # Bind size to update_size method
-        self.elevation = dp(6)
+        self.elevation = dp(0)
         self.soft_shadow_cl = [0, 0, 0, .05]
         self.radius = dp(10)
         self.md_bg_color = "darkgrey"
