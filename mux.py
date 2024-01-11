@@ -21,7 +21,7 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.metrics import dp
 from kivymd.uix.label import MDLabel
 from kivymd.font_definitions import theme_font_styles
-
+from kivymd.uix.button import MDFloatingActionButton
 def get_ip_address():
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -55,6 +55,13 @@ class SquareCard(MDCard):
 KV = '''
 BoxLayout:
     orientation: 'vertical'
+    
+    MDTopAppBar:
+        title: "Fiber Mux"
+        md_bg_color: app.theme_cls.primary_color
+        elevation: 10
+        right_action_items: [['power', lambda x: app.on_power_button_press()]]
+
     MDBottomNavigation:
         id: bottom_navigation
         MDBottomNavigationItem:
@@ -191,7 +198,6 @@ BoxLayout:
                             max: 245
                             value: 100  # Default value
                             on_value: app.adjust_brightness(self.value)
-
 '''
 class Example(MDApp):
     dialog = None
@@ -271,6 +277,12 @@ class Example(MDApp):
         except Exception as e:
             print(f"Error saving brightness value: {e}")
 
-
+    def on_power_button_press(self, *args):
+        try:
+            subprocess.run(['sudo', 'reboot'], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to reboot: {e}")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 Example().run()
 
