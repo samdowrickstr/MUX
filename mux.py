@@ -2,7 +2,7 @@ import os
 import socket
 import subprocess
 from kivy.config import Config
-Config.set('graphics', 'rotation', '90')
+Config.set('graphics', 'rotation', '0')
 Config.set('graphics', 'borderless', '1')
 Config.set('graphics', 'width', '1480')
 Config.set('graphics', 'height', '320')
@@ -25,6 +25,8 @@ from kivymd.uix.button import MDFloatingActionButton
 from kivy.clock import Clock
 from datetime import datetime
 from kivy.uix.boxlayout import BoxLayout
+from kivymd.uix.snackbar import Snackbar
+
 
 
 def get_ip_address():
@@ -333,7 +335,17 @@ class Example(MDApp):
             print(f"An error occurred: {e}")
     
     def on_start(self):
-        Clock.schedule_interval(self.update_time, 0.2)
+        ip_address = get_ip_address()
+        self.show_ip_banner(ip_address)
+        Clock.schedule_interval(self.update_time, 1)
+
+    def show_ip_banner(self, ip):
+        banner = Snackbar(text=f"IP Address: {ip}")
+        banner.size_hint_x = 0.13  # Adjust the size of the banner
+        banner.pos_hint
+        banner.snackbar_x= (1480/2)-(banner.width)
+        banner.snackbar_y= 40
+        banner.open()
 
     def update_time(self, *args):
         self.root.ids.time_label.title = datetime.now().strftime('%H:%M:%S')
