@@ -25,8 +25,6 @@ from kivymd.uix.button import MDFloatingActionButton
 from kivy.clock import Clock
 from datetime import datetime
 from kivy.uix.boxlayout import BoxLayout
-from kivymd.uix.snackbar import Snackbar
-
 
 
 def get_ip_address():
@@ -70,13 +68,13 @@ BoxLayout:
         md_bg_color: app.theme_cls.primary_color
         elevation: 0
         right_action_items: [['git', lambda x: app.on_git_button_press()], ['power', lambda x: app.on_power_button_press()]]
-
+    
     MDBottomNavigation:
         id: bottom_navigation
         MDBottomNavigationItem:
             name: 'screen 1'
-            text: 'Power'
-            icon: 'flash'
+            text: 'I/O'
+            icon: 'connection'
 
             BoxLayout:
                 orientation: 'vertical'
@@ -164,19 +162,19 @@ BoxLayout:
             BoxLayout:
                 orientation: 'vertical'
                 padding: "10dp"
+        MDBottomNavigationItem:
+            name: 'screen 5'
+            text: 'Dashboard'
+            icon: 'view-dashboard'
+
+            BoxLayout:
+                orientation: 'vertical'
+                padding: "10dp"
 
                 MDLabel:
-                    text: 'Power tab content here'
+                    text: 'Settings tab content here'
                     halign: 'center'
-
-                MDCard:
-                    size_hint: None, None
-                    size: "280dp", "40dp"
-                    pos_hint: {"center_x": 0.5}
-                    elevation: 0
-                    MDFlatButton:
-                        text: "Open Dialog"
-                        on_release: app.show_dialog()
+            
         MDBottomNavigationItem:
             name: 'screen 4'
             text: 'Settings'
@@ -335,17 +333,7 @@ class Example(MDApp):
             print(f"An error occurred: {e}")
     
     def on_start(self):
-        ip_address = get_ip_address()
-        self.show_ip_banner(ip_address)
-        Clock.schedule_interval(self.update_time, 1)
-
-    def show_ip_banner(self, ip):
-        banner = Snackbar(text=f"IP Address: {ip}")
-        banner.size_hint_x = 0.13  # Adjust the size of the banner
-        banner.pos_hint
-        banner.snackbar_x= (1480/2)-(banner.width)
-        banner.snackbar_y= 40
-        banner.open()
+        Clock.schedule_interval(self.update_time, 0.2)
 
     def update_time(self, *args):
         self.root.ids.time_label.title = datetime.now().strftime('%H:%M:%S')
