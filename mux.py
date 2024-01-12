@@ -2,7 +2,7 @@ import os
 import socket
 import subprocess
 from kivy.config import Config
-Config.set('graphics', 'rotation', '90')
+Config.set('graphics', 'rotation', '0')
 Config.set('graphics', 'borderless', '1')
 Config.set('graphics', 'width', '1480')
 Config.set('graphics', 'height', '320')
@@ -49,13 +49,14 @@ class SquareCard(MDCard):
         self.bind(size=self.update_size)  # Bind size to update_size method
         self.elevation = dp(0)
         self.soft_shadow_cl = [0, 0, 0, .05]
-        self.radius = dp(10)
+        self.radius = dp(6)
         self.md_bg_color = "darkgrey"
         self.unfocus_color = "darkgrey"
         self.focus_color = "grey"
         self.ripple_behavior = True
     def update_size(self, instance, value):
         self.width = self.height  # Set width equal to height
+        
     def change_color(self, color):
         self.md_bg_color = color
         
@@ -251,7 +252,7 @@ class Example(MDApp):
             chip_layout.size_hint_x = None
             chip_layout.width = self.calculate_chips_width()  # Calculate the total width of the chips
 
-            for color_name, color_value in [("RED", (1, 0, 0, 1)), ("GREEN", (0, 1, 0, 1)), ("ORANGE", (1, 0.65, 0, 1))]:
+            for color_name, color_value in [("RED", (1, 0, 0, 0.9)), ("GREEN", (0, 1, 0, 0.55)), ("ORANGE", (1, 0.65, 0, 0.9))]:
                 chip = MDChip(text=color_name)
                 chip.md_bg_color = color_value
                 chip.bind(on_release=lambda chip, color=color_value: self.change_card_color(color))
