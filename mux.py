@@ -2,7 +2,7 @@ import os
 import socket
 import subprocess
 from kivy.config import Config
-Config.set('graphics', 'rotation', '90')
+Config.set('graphics', 'rotation', '0')
 Config.set('graphics', 'borderless', '1')
 Config.set('graphics', 'width', '1480')
 Config.set('graphics', 'height', '320')
@@ -24,6 +24,7 @@ from kivymd.font_definitions import theme_font_styles
 from kivymd.uix.button import MDFloatingActionButton
 from kivy.clock import Clock
 from datetime import datetime
+from kivy.uix.boxlayout import BoxLayout
 
 
 def get_ip_address():
@@ -55,6 +56,8 @@ class SquareCard(MDCard):
         self.ripple_behavior = True
     def update_size(self, instance, value):
         self.width = self.height  # Set width equal to height
+    def change_color(self, color):
+        self.md_bg_color = color
         
 KV = '''
 BoxLayout:
@@ -90,45 +93,45 @@ BoxLayout:
                         adaptive_width: True
 
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                             MDLabel:
                                 text: "Power 1"
                                 halign: "center"
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                             MDLabel:
                                 text: "Power 2"
                                 halign: "center"
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                             MDLabel:
                                 text: "Power 3"
                                 halign: "center"
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                             MDLabel:
                                 text: "Power 4"
                                 halign: "center"
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
                         SquareCard:
-                            on_release: app.show_dialog()
+                            on_release: app.show_dialog(self)
 
         MDBottomNavigationItem:
             name: 'screen 2'
@@ -208,7 +211,7 @@ BoxLayout:
 '''
 class Example(MDApp):
     dialog = None
-
+    clicked_card = None
     def __init__(self, **kwargs):
         super(Example, self).__init__(**kwargs)
         self.current_brightness = self.read_brightness_value()
@@ -234,28 +237,57 @@ class Example(MDApp):
         return root_widget
 
 
-    def show_dialog(self):
+    def show_dialog(self, card):
+        self.clicked_card = card
+
         if not self.dialog:
+            # Outer layout for centering
+            outer_layout = BoxLayout(orientation='vertical', spacing=dp(10))
+            outer_layout.size_hint = (1, None)
+            outer_layout.height = dp(48)  # Adjust the height as needed
+
+            # Inner horizontal BoxLayout for chips
+            chip_layout = BoxLayout(orientation='horizontal', spacing=dp(10))
+            chip_layout.size_hint_x = None
+            chip_layout.width = self.calculate_chips_width()  # Calculate the total width of the chips
+
+            for color_name, color_value in [("RED", (1, 0, 0, 1)), ("GREEN", (0, 1, 0, 1)), ("ORANGE", (1, 0.65, 0, 1))]:
+                chip = MDChip(text=color_name)
+                chip.md_bg_color = color_value
+                chip.bind(on_release=lambda chip, color=color_value: self.change_card_color(color))
+                chip_layout.add_widget(chip)
+
+            # Add the inner layout to the outer layout
+            outer_layout.add_widget(chip_layout)
+
             self.dialog = MDDialog(
-                title="Choose an Option",
-                type="simple",
+                title="Choose a Color",
+                type="custom",
+                content_cls=outer_layout,
                 buttons=[
                     MDFlatButton(
-                        text="CANCEL",
+                        text="CLOSE",
                         theme_text_color="Custom",
                         text_color=self.theme_cls.primary_color,
-                        on_release=self.close_dialog  # Bind close_dialog method
-                    ),
-                    MDFlatButton(
-                        text="DISCARD",
-                        theme_text_color="Custom",
-                        text_color=self.theme_cls.primary_color,
-                        on_release=self.close_dialog  # Bind close_dialog method
+                        on_release=self.close_dialog
                     ),
                 ],
-                items=[MDChip(text=f"Chip {i}") for i in range(5)]
             )
+
         self.dialog.open()
+
+    def calculate_chips_width(self):
+        # Adjust the width calculation based on the number and size of your chips
+        number_of_chips = 3
+        chip_width = dp(100)  # Assuming each chip is 100dp wide
+        spacing = dp(10)  # Spacing between chips
+        total_width = number_of_chips * chip_width + (number_of_chips - 1) * spacing
+        return total_width
+
+    def change_card_color(self, color):
+        if self.clicked_card:
+            self.clicked_card.md_bg_color = color  # Directly change the background color
+        self.dialog.dismiss()
 
     def close_dialog(self, *args):
         self.dialog.dismiss()  # This will close the dialog
@@ -301,7 +333,7 @@ class Example(MDApp):
             print(f"An error occurred: {e}")
     
     def on_start(self):
-        Clock.schedule_interval(self.update_time, 1)
+        Clock.schedule_interval(self.update_time, 0.2)
 
     def update_time(self, *args):
         self.root.ids.time_label.title = datetime.now().strftime('%H:%M:%S')
