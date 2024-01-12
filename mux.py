@@ -2,7 +2,7 @@ import os
 import socket
 import subprocess
 from kivy.config import Config
-Config.set('graphics', 'rotation', '0')
+Config.set('graphics', 'rotation', '90')
 Config.set('graphics', 'borderless', '1')
 Config.set('graphics', 'width', '1480')
 Config.set('graphics', 'height', '320')
@@ -49,14 +49,13 @@ class SquareCard(MDCard):
         self.bind(size=self.update_size)  # Bind size to update_size method
         self.elevation = dp(0)
         self.soft_shadow_cl = [0, 0, 0, .05]
-        self.radius = dp(6)
+        self.radius = dp(10)
         self.md_bg_color = "darkgrey"
         self.unfocus_color = "darkgrey"
         self.focus_color = "grey"
         self.ripple_behavior = True
     def update_size(self, instance, value):
         self.width = self.height  # Set width equal to height
-        
     def change_color(self, color):
         self.md_bg_color = color
         
